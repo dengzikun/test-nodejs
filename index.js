@@ -7,7 +7,7 @@ http
       console.log(req.url)
     }
     res.statusCode = 200
-    res.send('ok')
+    res.end('ok')
   })
   .listen(8080, () => {
     console.log('listening at 8080')
