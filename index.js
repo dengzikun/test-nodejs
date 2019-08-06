@@ -6,7 +6,8 @@ http
     if (req.url === '/webhook') {
       console.log(req.url)
     }
-    res.status(200).send('ok')
+    res.statusCode = 200
+    res.send('ok')
   })
   .listen(8080, () => {
     console.log('listening at 8080')
