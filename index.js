@@ -17,7 +17,7 @@ function sign(secret, data) {
 app.post('/webhook', (req, res) => {
   if (req.headers['x-github-event']) {
     const signature = req.headers['x-hub-signature']
-    if (signature === sign(secret, req.body)) {
+    if (signature === sign(secret, req.body.toString())) {
       console.log('ok')
     }
     console.log(req.headers)
