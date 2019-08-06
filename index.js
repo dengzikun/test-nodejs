@@ -16,7 +16,7 @@ function sign(secret, data) {
 }
 
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded())
+app.use(bodyParser.urlencoded({ extended: false }))
 
 app.post('/webhook', (req, res) => {
   console.log(req.body)
