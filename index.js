@@ -16,10 +16,21 @@ function sign(secret, data) {
 
 app.post('/webhook', (req, res) => {
   if (req.headers['x-github-event']) {
-    const signature = req.headers['x-hub-signature']
-    if (signature === sign(secret, req.body.toString())) {
-      console.log('ok')
-    }
+    const reqData = []
+    let size = 0
+    req.on('data', (data) => {
+      console.log('>>>req on')
+      reqData.push(data)
+      size += data.length
+    })
+    req.on('end', () => {
+      req.reqData = Buffer.concat(reqData, size)
+      const signature = req.headers['x-hub-signature']
+      if (signature === sign(secret, req.reqData)) {
+        console.log('ok')
+      }
+    })
+
     console.log(req.headers)
   }
   res.status(200).send('ok')
