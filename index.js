@@ -2,7 +2,8 @@ const express = require('express')
 const app = express()
 
 app.post('/github', (req, res) => {
-  console.log(req)
+  console.log(req.headers)
+  console.log(req.payload)
   res.status(200).send('ok')
 })
 
