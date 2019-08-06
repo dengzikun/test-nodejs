@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const bodyParser = require('body-parser')
 const crypto = require('crypto')
 
 const secret = 'mysecret'
@@ -14,7 +15,11 @@ function sign(secret, data) {
   )
 }
 
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded())
+
 app.post('/webhook', (req, res) => {
+  console.log(req.body)
   if (req.headers['x-github-event']) {
     const reqData = []
     let size = 0
