@@ -2,8 +2,18 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 const crypto = require('crypto')
+const Kafka = require('no-kafka')
+const producer = new Kafka.Producer()
 
 const secret = 'mysecret'
+
+async function kafkaInit() {
+  try {
+    await producer.init()
+  } catch (err) {
+    console.log(err)
+  }
+}
 
 function sign(secret, data) {
   return (
@@ -33,31 +43,31 @@ app.post('/webhook', (req, res) => {
       console.log('ok')
       res.status(200).send('ok')
     }
+  } else {
+    if (req.headers.authorization) {
+      let str = req.headers.authorization
+      str = str.slice(6, str.length)
+      console.log(str)
+
+      let str1 = Buffer.from(str, 'base64').toString()
+      console.log(str1)
+      if (str1 === 'test:1234') {
+        console.log('authorization')
+        console.log(req.body)
+      }
+    }
+    console.log('azure')
+    console.log(req.headers)
+    res.status(200).send('azure')
   }
 })
 
-// app.post('/webhook', (req, res) => {
-//   console.log(req.body)
-//   if (req.headers['x-github-event']) {
-//     const reqData = []
-//     let size = 0
-//     req.on('data', (data) => {
-//       console.log('>>>req on')
-//       reqData.push(data)
-//       size += data.length
-//     })
-//     req.on('end', () => {
-//       req.reqData = Buffer.concat(reqData, size)
-//       const signature = req.headers['x-hub-signature']
-//       if (signature === sign(secret, req.reqData)) {
-//         console.log(req.headers)
-//         console.log('ok')
-//         res.status(200).send('ok')
-//       }
-//     })
-//   }
-// })
-
-app.listen(8080, () => {
-  console.log('listening at 8080')
-})
+kafkaInit()
+  .then(() => {
+    app.listen(8080, () => {
+      console.log('listening at 8080')
+    })
+  })
+  .catch((err) => {
+    console.log(err)
+  })
