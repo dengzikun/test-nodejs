@@ -26,7 +26,6 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 app.post('/webhook', (req, res) => {
   if (req.headers['x-github-event']) {
-    req.reqData = Buffer.concat(reqData, size)
     const signature = req.headers['x-hub-signature']
     if (signature === sign(secret, req.rawBody)) {
       console.log(req.headers)
