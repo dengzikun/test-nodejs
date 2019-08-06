@@ -27,13 +27,12 @@ app.post('/webhook', (req, res) => {
       req.reqData = Buffer.concat(reqData, size)
       const signature = req.headers['x-hub-signature']
       if (signature === sign(secret, req.reqData)) {
+        console.log(req.headers)
         console.log('ok')
+        res.status(200).send('ok')
       }
     })
-
-    console.log(req.headers)
   }
-  res.status(200).send('ok')
 })
 
 app.listen(8080, () => {
