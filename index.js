@@ -3,7 +3,10 @@ const crypto = require('crypto')
 
 http
   .createServer((req, res) => {
-    console.log(req.url)
+    if (req.url === '/webhook') {
+      console.log(req.url)
+    }
+    res.statusCode(200).send('ok')
   })
   .listen(8080, () => {
     console.log('listening at 8080')
