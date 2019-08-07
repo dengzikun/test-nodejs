@@ -13,6 +13,8 @@ const producer = new Kafka.Producer({
 
 // test
 
+// test
+
 const secret = 'mysecret'
 
 async function kafkaInit() {
