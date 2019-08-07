@@ -7,6 +7,8 @@ const producer = new Kafka.Producer({
   connectionString: 'kafka://192.168.1.19:9092'
 })
 
+// test
+
 const secret = 'mysecret'
 
 async function kafkaInit() {
