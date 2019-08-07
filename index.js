@@ -32,7 +32,7 @@ function sign(secret, data) {
   )
 }
 
-app.use(
+app.use( 
   bodyParser.json({
     verify: function(req, res, buf, encoding) {
       req.rawBody = buf
