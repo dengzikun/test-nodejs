@@ -3,16 +3,23 @@ const app = express()
 const bodyParser = require('body-parser')
 const crypto = require('crypto')
 const Kafka = require('no-kafka')
-const producer = new Kafka.Producer()
+const producer = new Kafka.Producer({
+  connectionString: 'kafka://192.168.1.19:9092'
+})
 
 const secret = 'mysecret'
 
 async function kafkaInit() {
-  try {
-    await producer.init()
-  } catch (err) {
-    console.log(err)
-  }
+  console.log('asdfadsf')
+  await producer.init()
+  console.log('111111')
+  await producer.send({
+    topic: 'sun',
+    partition: 0,
+    message: {
+      value: 'Hello!'
+    }
+  })
 }
 
 function sign(secret, data) {
@@ -32,7 +39,7 @@ app.use(
     }
   })
 )
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: true }))
 
 app.post('/webhook', (req, res) => {
   if (req.headers['x-github-event']) {
@@ -62,11 +69,19 @@ app.post('/webhook', (req, res) => {
   }
 })
 
+// kafkaInit()
+//   .then(() => {
+//     app.listen(8080, () => {
+//       console.log('listening at 8080')
+//     })
+//   })
+//   .catch((err) => {
+//     console.log(err)
+//   })
+
 kafkaInit()
   .then(() => {
-    app.listen(8080, () => {
-      console.log('listening at 8080')
-    })
+    console.log('kafka ok')
   })
   .catch((err) => {
     console.log(err)
